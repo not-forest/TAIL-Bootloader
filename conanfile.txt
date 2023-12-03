@@ -1,0 +1,5 @@
+[dependencies]
+
+[generators]
+CMakeDeps
+CMakeToolchain
