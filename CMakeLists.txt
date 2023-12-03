@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(test_project C ASM)
+project(tail_bootloader C ASM)
 
 # Project paths
 set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
@@ -25,7 +25,7 @@ foreach(ASSEMBLY_FILE IN LISTS ASSEMBLY_SOURCES)
     )
 endforeach()
 
-# Add custom target for compiling main.c to object file
+# Compiling
 add_custom_target(compile
     COMMAND gcc -c -g -Os -march=x86-64 -ffreestanding -Wall -Werror ${SRC_DIR}/main.c -o ${BUILD_DIR}/main.o
     COMMAND ld -static -T ${SRC_DIR}/scripts/linker.ld -nostdlib --nmagic -o ${BUILD_DIR}/tail_bootloader.elf ${ASSEMBLY_OBJECTS}
@@ -35,9 +35,19 @@ add_custom_target(compile
     COMMENT "Compiling TAIL.."
 )
 
-# Link assembly objects with main.c and generate tail_bootloader.img
-add_custom_target(run
+# Run TAIL bootloader in QEMU with showed interrupts.
+add_custom_target(run_int
     COMMAND qemu-system-x86_64 -d int -boot c ${BUILD_DIR}/tail_bootloader.img
+    DEPENDS compile
+    COMMENT "Running QEMU.."
+)
+
+# Run TAIL bootloader in QEMU in debug mode with GDB debugger.
+add_custom_target(run
+    COMMAND qemu-system-x86_64 -boot c ${BUILD_DIR}/tail_bootloader.img -s -S -no-reboot -no-shutdown &
+    COMMAND echo "Waiting for QEMU to start..."
+    COMMAND sleep 2
+    COMMAND gdb -ex "target remote :1234" -ex symbol-file ${BUILD_DIR}/tail_bootloader.bin -ex "layout asm"
     DEPENDS compile
     COMMENT "Running QEMU.."
 )
