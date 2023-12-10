@@ -1,13 +1,13 @@
 /*
     A main entry of the TAIL bootloader.
 */
-asm(".code16gcc");
 
+#include<inttypes.h>
 #include "memory_map.h"
-#include "bios/video_servises.h"
 
-void main(void) {
-    print_str("Hello bootloader!");
+void main(uint16_t boot_drive) {
+    char* c = (char*)0xb8000;
+    *c = 'A';
 
     while(1) {}
 }
