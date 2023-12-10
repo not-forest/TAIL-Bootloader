@@ -3,14 +3,14 @@
 A simple bootloader, written in C, is currently in its early stages of development. List that outlines the planned features and milestones for the bootloader:
 
 ### 1. Two Staged Bootloader
-   - [❌] Implement the first stage of the bootloader.
+   - [✅] Implement the first stage of the bootloader.
    - [❌] Develop the second stage to load the main bootloader functionality.
 
 ### 2. Bring the Kernel
    - [❌] Implement the code to locate and load the kernel into memory.
 
 ### 3. Go to Protected Mode
-   - [❌] Transition the system into protected mode.
+   - [✅] Transition the system into protected mode.
 
 ### 4. Provide Kernel Information
    - [❌] Develop mechanisms to provide essential information to the kernel for correct operation.
