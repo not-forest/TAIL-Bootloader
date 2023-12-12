@@ -25,7 +25,7 @@ endforeach()
 
 # Compiling
 add_custom_target(compile
-    COMMAND gcc -c -g -Os -m32 -D__KERNEL__ -march=i386 -ffreestanding -fomit-frame-pointer -fno-exceptions -fno-asynchronous-unwind-tables -fno-unwind-tables -Wall -Werror ${SRC_DIR}/main.c -o main.o
+    COMMAND gcc -c -g -Os -m32 -D__KERNEL__ -march=i386 -ffreestanding -fomit-frame-pointer -fno-exceptions -fno-pic -fno-asynchronous-unwind-tables -fno-unwind-tables -Wall -Werror ${SRC_DIR}/main.c -o main.o
     COMMAND cp ${SRC_DIR}/scripts/*.ld .
     COMMAND ld.bfd -m elf_i386 -T linker.ld -nostdlib --nmagic -o tail_bootloader.elf
     COMMAND objcopy -O binary tail_bootloader.elf tail_bootloader.bin
