@@ -22,7 +22,7 @@ _start:
     mov es, ax              ; Clear the es segment
     mov ss, ax              ; Zeroing the stack segment
 
-    mov sp, [_MBRROM_ADDR_] ; Setup stack to grow below the bootloader.
+    mov sp, _MBRROM_ADDR_ ; Setup stack to grow below the bootloader.
 
     mov [_BOOT_DRIVE_], dl  ; BIOS sets the boot drive in 'dl' reg.
 
@@ -70,7 +70,8 @@ _init_protected:
     mov fs, ax
     mov gs, ax
 
-    mov esp, [_APPRAM_ADDR_] ; Setting up a new stack
+    mov esp, _BOOTLOADER_STACK_ ; Setting up a new stack
+
     mov eax, [_BOOT_DRIVE_]  ; Getting a selected drive info.
     push eax
 
@@ -82,4 +83,4 @@ _BOOT_DRIVE_ db 0
 ; Extern variables
 extern _MBRROM_ADDR_ ; Head addr.
 extern _APPROM_ADDR_ ; Tail addr.
-extern _APPRAM_ADDR_ ; Tail's stack addr.
+extern _BOOTLOADER_STACK_ ; Tail's stack top.
