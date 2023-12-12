@@ -3,11 +3,14 @@
 */
 
 #include<inttypes.h>
+
 #include "memory_map.h"
+#include "vga/vga.h"
 
 void main(uint16_t boot_drive) {
-    char* c = (char*)0xb8000;
-    *c = 'A';
+    VGABuffer vga = {.row = 0, .col = 0};
+    
+    prints("Hello bootloader!!!", COLOR_WHITE, COLOR_BLACK, &vga);
 
     while(1) {}
 }
