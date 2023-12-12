@@ -11,7 +11,7 @@ ENTRY(_start)
 
 INCLUDE memory.ld
 
-INPUT(mbr.o gdt.o main.o)
+INPUT(mbr.o gdt.o disk.o main.o)
 
 SECTIONS
 {
@@ -24,7 +24,9 @@ SECTIONS
     */
     .text : AT(ORIGIN(mbrrom))
     {
-        *(.text)
+        mbr.o*(.text)
+        gdt.o*(.text)
+        disk.o(.text)
     } > mbrrom
 
     .signature : AT(0x7DFE)
@@ -61,6 +63,7 @@ SECTIONS
         . =  ALIGN(8);
         . += _STACK_SIZE_;
         . =  ALIGN(8);
+        _BOOTLOADER_STACK_ = .;
     } > appram
 
     _BOOTLOADER_END_ = .;
