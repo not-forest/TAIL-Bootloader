@@ -9,8 +9,11 @@
 
 void main(uint16_t boot_drive) {
     VGABuffer vga = {.row = 0, .col = 0};
-    
-    prints("Hello bootloader!!!", COLOR_WHITE, COLOR_BLACK, &vga);
+    println("Printing the line.", COLOR_WHITE, COLOR_BLACK, &vga);
+
+    prints("Hello bootloader!!!.\nThe new line. ", COLOR_WHITE, COLOR_BLACK, &vga);
+    prints("Hello again!!!.\0Not this time(", COLOR_WHITE, COLOR_BLACK, &vga);
+    vga_swap(2, 1);
 
     while(1) {}
 }
