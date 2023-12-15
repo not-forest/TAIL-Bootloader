@@ -8,10 +8,10 @@ MEMORY
 {
     mbrrom (rx)  : ORIGIN = 0x7C00, LENGTH = 512 /* First stage  */
     approm (rx)  : ORIGIN = 0x7E00, LENGTH = 20K /* Second stage */
-    appram (rwx) : ORIGIN = 0xEC00, LENGTH = 10K /* Second stage */
+    appram (rwx) : ORIGIN = 0xEC00, LENGTH = 1K /* Second stage */
 }
 
-_STACK_SIZE_ = 10K;
+_STACK_SIZE_ = 1K;
 
 _MBRROM_ADDR_ = ABSOLUTE(ORIGIN(mbrrom));
 _MBRROM_SIZE_ = ABSOLUTE(LENGTH(mbrrom));
