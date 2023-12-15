@@ -15,6 +15,8 @@
 #define BUFFER_WIDTH 80
 #define BUFFER_HEIGHT 25
 
+#define COLOR_MASK 0xf
+
 #define COLOR_BLACK 0x0
 #define COLOR_BLUE 0x1
 #define COLOR_GREEN 0x2
@@ -34,14 +36,14 @@
 
 // A struct that tracks the cursor to print out messages correctly.
 typedef struct {
-    uint8_t row, col;
+    uint_fast8_t row, col;
 } VGABuffer;
 
 /* Shifts the values in the buffer by rows 
 
 The function is not suitable for switching rows, but only shift to a
 given location. Values must be within the height of the buffer. */
-static inline void vga_shift(uint8_t old, uint8_t new) {
+static inline void vga_shift(uint_fast8_t old, uint_fast8_t new) {
     // Pointer to old row buffer.
     volatile uint16_t* old_ptr = (volatile uint16_t*)BUFFER_PTR + old * BUFFER_WIDTH;
     // Pointer to new row buffer.
@@ -56,7 +58,7 @@ static inline void vga_shift(uint8_t old, uint8_t new) {
 /* Swaps two rows instead of shifting one to another. 
 
 The swapping is done via XOR operation for each bit*/
-static inline void vga_swap(uint8_t old, uint8_t new) {
+static inline void vga_swap(uint_fast8_t old, uint_fast8_t new) {
     // Pointer to old row buffer.
     volatile uint16_t* old_ptr = (volatile uint16_t*)BUFFER_PTR + old * BUFFER_WIDTH;
     // Pointer to new row buffer.
