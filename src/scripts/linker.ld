@@ -49,13 +49,13 @@ SECTIONS
     {
         *(.bss*)
         *(COMMON)
-    } > appram
+    } > approm
 
     /* Initialized data */
     .data :
     {
         *(.data*)
-    } > appram AT > approm
+    } > approm
 
     /* App's start */
     .stack (NOLOAD) :
