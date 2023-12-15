@@ -1,0 +1,228 @@
+CODE PAGE 737 (CP737, IBM 00737, EOM737)
+
+Dec  Hex   Char    Description
+---  ---   ----    -----------
+ 32  20    (space) Space
+ 33  21    !       Exclamation mark
+ 34  22    "       Double quote
+ 35  23    #       Number sign (hash)
+ 36  24    $       Dollar sign
+ 37  25    %       Percent
+ 38  26    &       Ampersand
+ 39  27    '       Single quote (apostrophe)
+ 40  28    (       Left parenthesis
+ 41  29    )       Right parenthesis
+ 42  2A    *       Asterisk
+ 43  2B    +       Plus sign
+ 44  2C    ,       Comma
+ 45  2D    -       Hyphen (minus sign)
+ 46  2E    .       Period (full stop)
+ 47  2F    /       Forward slash
+ 48  30    0       Digit zero
+ 49  31    1       Digit one
+ 50  32    2       Digit two
+ 51  33    3       Digit three
+ 52  34    4       Digit four
+ 53  35    5       Digit five
+ 54  36    6       Digit six
+ 55  37    7       Digit seven
+ 56  38    8       Digit eight
+ 57  39    9       Digit nine
+ 58  3A    :       Colon
+ 59  3B    ;       Semicolon
+ 60  3C    <       Less than sign
+ 61  3D    =       Equals sign
+ 62  3E    >       Greater than sign
+ 63  3F    ?       Question mark
+ 64  40    @       At sign
+ 65  41    A       Uppercase letter A
+ 66  42    B       Uppercase letter B
+ 67  43    C       Uppercase letter C
+ 68  44    D       Uppercase letter D
+ 69  45    E       Uppercase letter E
+ 70  46    F       Uppercase letter F
+ 71  47    G       Uppercase letter G
+ 72  48    H       Uppercase letter H
+ 73  49    I       Uppercase letter I
+ 74  4A    J       Uppercase letter J
+ 75  4B    K       Uppercase letter K
+ 76  4C    L       Uppercase letter L
+ 77  4D    M       Uppercase letter M
+ 78  4E    N       Uppercase letter N
+ 79  4F    O       Uppercase letter O
+ 80  50    P       Uppercase letter P
+ 81  51    Q       Uppercase letter Q
+ 82  52    R       Uppercase letter R
+ 83  53    S       Uppercase letter S
+ 84  54    T       Uppercase letter T
+ 85  55    U       Uppercase letter U
+ 86  56    V       Uppercase letter V
+ 87  57    W       Uppercase letter W
+ 88  58    X       Uppercase letter X
+ 89  59    Y       Uppercase letter Y
+ 90  5A    Z       Uppercase letter Z
+ 91  5B    [       Left square bracket
+ 92  5C    \       Backslash
+ 93  5D    ]       Right square bracket
+ 94  5E    ^       Caret (circumflex)
+ 95  5F    _       Underscore
+ 96  60    `       Grave accent
+ 97  61    a       Lowercase letter a
+ 98  62    b       Lowercase letter b
+ 99  63    c       Lowercase letter c
+100  64    d       Lowercase letter d
+101  65    e       Lowercase letter e
+102  66    f       Lowercase letter f
+103  67    g       Lowercase letter g
+104  68    h       Lowercase letter h
+105  69    i       Lowercase letter i
+106  6A    j       Lowercase letter j
+107  6B    k       Lowercase letter k
+108  6C    l       Lowercase letter l
+109  6D    m       Lowercase letter m
+110  6E    n       Lowercase letter n
+111  6F    o       Lowercase letter o
+112  70    p       Lowercase letter p
+113  71    q       Lowercase letter q
+114  72    r       Lowercase letter r
+115  73    s       Lowercase letter s
+116  74    t       Lowercase letter t
+117  75    u       Lowercase letter u
+118  76    v       Lowercase letter v
+119  77    w       Lowercase letter w
+120  78    x       Lowercase letter x
+121  79    y       Lowercase letter y
+122  7A    z       Lowercase letter z
+123  7B    {       Left curly brace
+124  7C    |       Vertical bar (pipe)
+125  7D    }       Right curly brace
+126  7E    ~       Tilde
+127  7F            Delete
+128  80    Ç       Latin Capital Letter C with Cedilla
+129  81    ü       Latin Small Letter U with Diaeresis
+130  82    é       Latin Small Letter E with Acute
+131  83    â       Latin Small Letter A with Circumflex
+132  84    ä       Latin Small Letter A with Diaeresis
+133  85    à       Latin Small Letter A with Grave
+134  86    å       Latin Small Letter A with Ring Above
+135  87    ç       Latin Small Letter C with Cedilla
+136  88    ê       Latin Small Letter E with Circumflex
+137  89    ë       Latin Small Letter E with Diaeresis
+138  8A    è       Latin Small Letter E with Grave
+139  8B    ï       Latin Small Letter I with Diaeresis
+140  8C    î       Latin Small Letter I with Circumflex
+141  8D    ì       Latin Small Letter I with Grave
+142  8E    Ä       Latin Capital Letter A with Diaeresis
+143  8F    Å       Latin Capital Letter A with Ring Above
+144  90    É       Latin Capital Letter E with Acute
+145  91    æ       Latin Small Ligature AE
+146  92    Æ       Latin Capital Ligature AE
+147  93    ô       Latin Small Letter O with Circumflex
+148  94    ö       Latin Small Letter O with Diaeresis
+149  95    ò       Latin Small Letter O with Grave
+150  96    û       Latin Small Letter U with Circumflex
+151  97    ù       Latin Small Letter U with Grave
+152  98    ÿ       Latin Small Letter Y with Diaeresis
+153  99    Ö       Latin Capital Letter O with Diaeresis
+154  9A    Ü       Latin Capital Letter U with Diaeresis
+155  9B    ¢       Cent Sign
+156  9C    £       Pound Sign
+157  9D    ¥       Yen Sign
+158  9E    ₧       Peseta Sign
+159  9F    ƒ       Latin Small Letter F with Hook
+160  A0    á       Latin Small Letter A with Acute
+161  A1    í       Latin Small Letter I with Acute
+162  A2    ó       Latin Small Letter O with Acute
+163  A3    ú       Latin Small Letter U with Acute
+164  A4    ñ       Latin Small Letter N with Tilde
+165  A5    Ñ       Latin Capital Letter N with Tilde
+166  A6    ª       Feminine Ordinal Indicator
+167  A7    º       Masculine Ordinal Indicator
+168  A8    ¿       Inverted Question Mark
+169  A9    ⌐       Reversed Not Sign
+170  AA    ¬       Not Sign
+171  AB    ½       Vulgar Fraction One Half
+172  AC    ¼       Vulgar Fraction One Quarter
+173  AD    ¡       Inverted Exclamation Mark
+174  AE    «       Left-Pointing Double Angle Quotation Mark
+175  AF    »       Right-Pointing Double Angle Quotation Mark
+176  B0    ░       Light Shade
+177  B1    ▒       Medium Shade
+178  B2    ▓       Dark Shade
+179  B3    │       Box Drawings Light Vertical
+180  B4    ┤       Box Drawings Light Vertical and Left
+181  B5    ╡       Box Drawings Vertical Single and Left Double
+182  B6    ╢       Box Drawings Vertical Double and Left Single
+183  B7    ╖       Box Drawings Down Double and Left Single
+184  B8    ╕       Box Drawings Down Single and Left Double
+185  B9    ╣       Box Drawings Double Vertical and Left
+186  BA    ║       Box Drawings Double Vertical
+187  BB    ╗       Box Drawings Double Down and Left
+188  BC    ╝       Box Drawings Double Up and Left
+189  BD    ╜       Box Drawings Up Double and Left Single
+190  BE    ╛       Box Drawings Up Single and Left Double
+191  BF    ┐       Box Drawings Light Down and Left
+192  C0    └       Box Drawings Light Up and Right
+193  C1    ┴       Box Drawings Light Up and Horizontal
+194  C2    ┬       Box Drawings Light Down and Horizontal
+195  C3    ├       Box Drawings Light Vertical and Right
+196  C4    ─       Box Drawings Light Horizontal
+197  C5    ┼       Box Drawings Light Vertical and Horizontal
+198  C6    ╞       Box Drawings Vertical Single and Right Double
+199  C7    ╟       Box Drawings Vertical Double and Right Single
+200  C8    ╚       Box Drawings Double Up and Right
+201  C9    ╔       Box Drawings Double Down and Right
+202  CA    ╩       Box Drawings Double Up and Horizontal
+203  CB    ╦       Box Drawings Double Down and Horizontal
+204  CC    ╠       Box Drawings Double Vertical and Right Single
+205  CD    ═       Box Drawings Double Horizontal
+206  CE    ╬       Box Drawings Double Vertical and Horizontal
+207  CF    ╧       Box Drawings Up Single and Horizontal Double
+208  D0    ╨       Box Drawings Up Double and Horizontal Single
+209  D1    ╤       Box Drawings Down Single and Horizontal Double
+210  D2    ╥       Box Drawings Down Double and Horizontal Single
+211  D3    ╙       Box Drawings Up Double and Right Single
+212  D4    ╘       Box Drawings Up Single and Right Double
+213  D5    ╒       Box Drawings Down Single and Right Double
+214  D6    ╓       Box Drawings Down Double and Right Single
+215  D7    ╫       Box Drawings Vertical Double and Horizontal Single
+216  D8    ╪       Box Drawings Vertical Single and Horizontal Double
+217  D9    ┘       Box Drawings Light Up and Left
+218  DA    ┌       Box Drawings Light Down and Right
+219  DB    █       Full Block
+220  DC    ▄       Lower Half Block
+221  DD    ¦       Broken Bar
+222  DE    Ð       Latin Capital Letter Eth
+223  DF    ð       Latin Small Letter Eth
+224  E0    Ê       Latin Capital Letter E with Circumflex
+225  E1    Ë       Latin Capital Letter E with Diaeresis
+226  E2    È       Latin Capital Letter E with Grave
+227  E3    ı       Latin Small Letter Dotless I
+228  E4    Î       Latin Capital Letter I with Circumflex
+229  E5    Ï       Latin Capital Letter I with Diaeresis
+230  E6    └       Box Drawings Light Up and Right
+231  E7    ┴       Box Drawings Light Up and Horizontal
+232  E8    ┬       Box Drawings Light Down and Horizontal
+233  E9    ├       Box Drawings Light Vertical and Right
+234  EA    ─       Box Drawings Light Horizontal
+235  EB    ┼       Box Drawings Light Vertical and Horizontal
+236  EC    ß       Latin Small Letter Sharp S
+237  ED    Ê       Latin Capital Letter E with Circumflex
+238  EE    Ë       Latin Capital Letter E with Diaeresis
+239  EF    È       Latin Capital Letter E with Grave
+240  F0    ì       Latin Small Letter I with Grave
+241  F1    ë       Latin Small Letter E with Diaeresis
+242  F2    è       Latin Small Letter E with Grave
+243  F3    ï       Latin Small Letter I with Diaeresis
+244  F4    ┘       Box Drawings Light Up and Left
+245  F5    ┌       Box Drawings Light Down and Right
+246  F6    Ò       Latin Capital Letter O with Grave
+247  F7    ó       Latin Small Letter O with Acute
+248  F8    ß       Latin Small Letter Sharp S
+249  F9    Ò       Latin Capital Letter O with Grave
+250  FA    Ú       Latin Capital Letter U with Acute
+251  FB    Û       Latin Capital Letter U with Circumflex
+252  FC    Ù       Latin Capital Letter U with Grave
+253  FD    ý       Latin Small Letter Y with Acute
+254  FE    û       Latin Small Letter U with Circumflex
+255  FF    þ       Latin Small Letter Thorn
