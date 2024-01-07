@@ -58,7 +58,7 @@ SECTIONS
     } > approm
 
     /* App's start */
-    .stack (NOLOAD) :
+    .stack (NOLOAD) : AT(ORIGIN(appram))
     {
         . =  ALIGN(8);
         . += _STACK_SIZE_;
