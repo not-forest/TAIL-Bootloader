@@ -90,8 +90,8 @@ int printc(unsigned char c, uint8_t fr, uint8_t bg, VGABuffer* vga) {
         return 0;
     }
     
-    /* Special case for new line characters */
-    if (c != '\n') {
+    /* Special case for new line and space characters */
+    if (c != '\n' && c != ' ') {
         // Pointer to the VGA buffer.
         volatile uint16_t* buf = (volatile uint16_t*)BUFFER_PTR + (vga->row * BUFFER_WIDTH + vga->col);
         uint16_t char_set = (bg << 12) | (fr << 8) | c; // Creating a formatted char for buffer.
@@ -129,6 +129,83 @@ static inline void println(char* str, uint8_t fr, uint8_t bg, VGABuffer* vga) {
     prints(str, fr, bg, vga);
     vga->col = 0;
     ++vga->row;
+}
+
+// Disables the cursor in the VGA mode.
+static inline void disable_cursor() {
+	asm volatile (
+        "mov $0x3d4, %%dx\n"
+        "mov $0xa, %%al\n"
+        "out %%al, %%dx\n"
+        
+        "inc %%dx\n"
+        "mov $0x20, %%al\n"
+        "out %%al, %%dx"
+
+        :
+        :
+        : "dx", "al"
+    );
+}
+
+/* Enables the cursor, with given start and end
+
+The start and end values are basically describe the height by rows of the cursor. The
+start must be smaller than end for cursor to be visible. The maximum value of both
+start and end is 15.*/
+static inline void enable_cursor(uint8_t cursor_start, uint8_t cursor_end) {
+    asm volatile (
+        // Setting up the cursor's start
+        "mov $0x3d4, %%dx\n"
+        "mov $0xa, %%al\n"
+        "out %%al, %%dx\n"
+
+        "inc %%dx\n"
+        "inb %%dx, %%al\n"
+        "and $0xc0, %%al\n"
+        "or %0, %%al\n"
+        "out %%al, %%dx\n"
+
+        // Setting up the cursor's start
+        "mov $0x3d4, %%dx\n"
+        "mov $0xb, %%al\n"
+        "out %%al, %%dx\n"
+
+        "inc %%dx\n"
+        "inb %%dx, %%al\n"
+        "and $0xe0, %%al\n"
+        "or %1, %%al\n"
+        "out %%al, %%dx\n"
+
+        :
+        : "r" (cursor_start), "r" (cursor_end)
+        : "dx", "al"
+    );
+}
+
+void update_cursor(uint8_t row, uint8_t col) {
+    uint16_t pos = row * BUFFER_WIDTH + col;
+    asm volatile (
+        // Moving the cursor
+        "mov $0x03d4, %%dx\n"
+        "mov $0x0f, %%al\n"
+        "out %%al, %%dx\n"
+
+        "inc %%dl\n"
+        "mov %%bl, %%al\n"
+        "out %%al, %%dx\n"
+
+        "dec %%dl\n"
+        "mov $0x0e, %%al\n"
+        "out %%al, %%dx\n"
+
+        "inc %%dl\n"
+        "mov %%bh, %%al\n"
+        "out %%al, %%dx\n"
+        :
+        : "b"(pos)
+        :
+    );
 }
 
 
