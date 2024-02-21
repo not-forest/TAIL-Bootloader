@@ -1,0 +1,27 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-g",
+      "-Os",
+      "-m32",
+      "-D__KERNEL__",
+      "-march=i386",
+      "-ffreestanding",
+      "-fomit-frame-pointer",
+      "-fno-exceptions",
+      "-fno-pic",
+      "-fno-asynchronous-unwind-tables",
+      "-fno-unwind-tables",
+      "-Wall",
+      "-Werror",
+      "-o",
+      "main.o",
+      "/home/notforest/Documents/TAIL-Bootloader/src/main.c"
+    ],
+    "directory": "/home/notforest/Documents/TAIL-Bootloader/build",
+    "file": "/home/notforest/Documents/TAIL-Bootloader/src/main.c",
+    "output": "/home/notforest/Documents/TAIL-Bootloader/build/main.o"
+  }
+]
