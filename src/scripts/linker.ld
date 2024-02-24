@@ -11,7 +11,12 @@ ENTRY(_start)
 
 INCLUDE memory.ld
 
-INPUT(mbr.o gdt.o disk.o main.o)
+INPUT(
+    /* ASM */    
+    mbr.o gdt.o disk.o 
+    /* C */
+    main.o int.o vga.o pic.o
+)
 
 SECTIONS
 {
@@ -65,6 +70,12 @@ SECTIONS
         . =  ALIGN(8);
         _BOOTLOADER_STACK_ = .;
     } > appram
+
+    /* Removing copy symbols. */ 
+    /DISCARD/ : 
+    {
+        *(COMMON)
+    }
 
     _BOOTLOADER_END_ = .;
 }
