@@ -23,8 +23,8 @@ A simple bootloader, written in C, is currently in its early stages of developme
 
 ## Current Project Status
 
-At this point bootloader can only print out text in real mode via BIOS support. Inline assembly in GCC is doing some strange moves. Should find more
-gcc flags to produce better 16bit code.
+Interrupts for bootloader application is set up and can perform some basic tasks. For non exceptions, only the 
+PIC support is added for now. The TAIL part of the bootloader runs if primitively configured protected mode. 
 
 ## Run
 
