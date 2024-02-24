@@ -4,13 +4,15 @@
 */
 #pragma once
 
-#ifndef _BOOTLOADER_MEMORY_MAP
-#define _BOOTLOADER_MEMORY_MAP
+#include<stdint.h>
 
-extern int _MBRROM_ADDR_; // Address of the master boot.
-extern int _MBRROM_SIZE_; // Size of the master boot.
-extern int _APPROM_ADDR_; // Address of the second stage.
-extern int _APPROM_SIZE_; // Size of the second stage.
-extern int _APPRAM_ADDR_; // Stack address.
+#ifndef _BOOTLOADER_MEMORY_MAP_
+#define _BOOTLOADER_MEMORY_MAP_
+
+extern uint32_t _MBRROM_ADDR_;    // Address of the master boot.
+extern uint16_t _MBRROM_SIZE_;    // Size of the master boot.
+extern uint32_t _APPROM_ADDR_;    // Address of the second stage.
+extern uint16_t _APPROM_SIZE_;    // Size of the second stage.
+extern uint32_t _APPRAM_ADDR_;    // Stack address.
 
 #endif
