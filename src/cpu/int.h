@@ -47,16 +47,20 @@ static inline void wfi() {
 
 // Writes a byte to the chosen port.
 __attribute__((no_caller_saved_registers)) 
-static inline void outb(uint16_t port, uint8_t val)
-{
+static inline void outb(uint16_t port, uint8_t val) {
     __asm__ volatile ( "outb %b0, %w1" : : "a"(val), "Nd"(port) : "memory");
 }
 
 // Writes a word to the chosen port.
 __attribute__((no_caller_saved_registers)) 
-static inline void outw(uint16_t port, uint16_t val)
-{
+static inline void outw(uint16_t port, uint16_t val) {
     __asm__ volatile ( "outw %w0, %w1" : : "a"(val), "Nd"(port) : "memory");
+}
+
+// Small wrapper around int3 instruction.
+__attribute__((no_caller_saved_registers))
+static inline void int3() {
+    __asm__ ( "int3" );
 }
 
 
@@ -90,6 +94,6 @@ static inline void shutdown() {
     #if !RELEASE 
         outw(0xB004, 0x2000); // Makes QEMU to close, will not execute in release. 
     #else
-        
+        // TODO! RELEASE SHUTDOWN. 
     #endif
 }
