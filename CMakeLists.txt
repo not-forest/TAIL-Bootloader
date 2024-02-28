@@ -30,7 +30,7 @@ add_custom_target(compile_bin
     COMMAND cp ${SRC_DIR}/scripts/*.ld .
     COMMAND ld.bfd -m elf_i386 -T linker.ld -nostdlib --nmagic -o tail_bootloader.elf
     COMMAND objcopy -O binary tail_bootloader.elf tail_bootloader.bin
-    COMMAND dd if=/dev/zero of=tail_bootloader.img bs=1024 count=2
+    COMMAND dd if=/dev/zero of=tail_bootloader.img bs=4096 count=2
     COMMAND dd if=tail_bootloader.bin of=tail_bootloader.img bs=512 conv=notrunc
     WORKING_DIRECTORY cd ${BUILD_DIR}
     DEPENDS compile
