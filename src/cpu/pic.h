@@ -6,11 +6,10 @@
  * */
 #pragma once
 
-#ifdef _PIC_
+#ifndef _PIC_
+#define _PIC_
 
-#include<assert.h>
 #include<stdint.h>
-#include"int.h"
 
 #define PIC1		    0x20		// IO base address for master PIC 
 #define PIC2		    0xA0		// IO base address for slave PIC

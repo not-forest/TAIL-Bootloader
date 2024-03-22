@@ -10,9 +10,6 @@
  * 
  * */
 
-#define _PIC_               // Using regular PIC instead of modern APIC.
-#define _VGA_INTERFACE_     // Output to regular VGA buffer.
-
 #include<stdint.h>
 
 #include"int.h"

@@ -4,8 +4,6 @@
  * therefore the small implementation is enough to provide information to the user.
  * */
 
-#define _VGA_INTERFACE_  // Output to regular VGA buffer.
-
 #include<stdint.h>
 #include"vga.h"
 

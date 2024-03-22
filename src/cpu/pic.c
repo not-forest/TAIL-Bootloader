@@ -2,10 +2,9 @@
  * Defines functions related to PIC controller.
  * */
 
-#define _PIC_
-
 #include<stdint.h>
 #include"pic.h"
+#include"int.h"
 
 /* 
  * Small function that remaps PIC's int vectors, so that it will send interrupts
@@ -42,7 +41,5 @@ void remap_pic(uint8_t master_offset) {
  * */
 __attribute__((no_caller_saved_registers)) 
 void end_of_interrupt(uint16_t port) {
-    assert(port == PIC1_COMMAND || port == PIC2_COMMAND);
-
     outb(PIC1_COMMAND, 0x20); // OCW2: telling the chosen PIC.
 }

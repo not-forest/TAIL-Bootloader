@@ -6,7 +6,11 @@
  * */
 #pragma once
 
+#ifndef _INTERRUPTS_
+#define _INTERRUPTS_
+
 #include <stdint.h>
+#include "handlers.h"
 #include "segm.h"
 
 #define TASK_GATE   0x85
@@ -97,3 +101,9 @@ static inline void shutdown() {
         // TODO! RELEASE SHUTDOWN. 
     #endif
 }
+
+// Definitions of handler functions unions.
+extern const HANDLER_FN DIVBZ;
+extern const HANDLER_FN PIC_TIMER; 
+
+#endif

@@ -4,7 +4,8 @@
  * */
 #pragma once
 
-#ifdef _VGA_INTERFACE_
+#ifndef _VGA_INTERFACE_
+#define _VGA_INTERFACE_
 
 #include<stdint.h>
 
