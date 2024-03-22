@@ -30,7 +30,7 @@ add_custom_target(compile_bin
     COMMAND cp ${SRC_DIR}/scripts/*.ld .
     COMMAND ld.bfd -m elf_i386 -T linker.ld -nostdlib --nmagic -o tail_bootloader.elf
     COMMAND objcopy -O binary tail_bootloader.elf tail_bootloader.bin
-    COMMAND dd if=/dev/zero of=tail_bootloader.img bs=4096 count=2
+    COMMAND dd if=/dev/zero of=tail_bootloader.img bs=2048 count=2
     COMMAND dd if=tail_bootloader.bin of=tail_bootloader.img bs=512 conv=notrunc
     WORKING_DIRECTORY cd ${BUILD_DIR}
     DEPENDS compile
@@ -39,14 +39,14 @@ add_custom_target(compile_bin
 
 # Run TAIL bootloader in QEMU with showed interrupts.
 add_custom_target(run_int
-    COMMAND qemu-system-i386 -d int -boot c ${BUILD_DIR}/tail_bootloader.img --no-reboot --no-shutdown
+    COMMAND qemu-system-x86_64 -d int -boot c ${BUILD_DIR}/tail_bootloader.img --no-reboot --no-shutdown
     DEPENDS compile_bin
     COMMENT "Running QEMU.."
 )
 
 # Run TAIL bootloader in QEMU in debug mode with GDB debugger.
 add_custom_target(run
-    COMMAND qemu-system-i386 -m 4096 -drive format=raw,file=${BUILD_DIR}/tail_bootloader.img -s -S -no-reboot -no-shutdown &
+    COMMAND qemu-system-x86_64 -m 4096 -drive format=raw,file=${BUILD_DIR}/tail_bootloader.img -s -S -no-reboot -no-shutdown &
     COMMAND echo "Waiting for QEMU to start..."
     COMMAND sleep 2
     COMMAND gdb -ex "target remote :1234" -ex symbol-file ${BUILD_DIR}/tail_bootloader.elf -ex "layout asm"
@@ -71,7 +71,7 @@ endforeach()
 foreach(C_FILE IN LISTS SRC_FILES)
     get_filename_component(FILENAME ${C_FILE} NAME_WE)
     add_custom_command(TARGET compile
-        COMMAND gcc -RELEASE -mgeneral-regs-only -c -g -Os -m32 -D__KERNEL__ -march=i386 -ffreestanding -fomit-frame-pointer -fno-exceptions -fno-pic -fno-asynchronous-unwind-tables -fno-unwind-tables -Wall -Werror ${C_FILE} -o ${BUILD_DIR}/${FILENAME}.o 
+        COMMAND gcc -RELEASE -mgeneral-regs-only -c -g -Os -m32 -D__KERNEL__ -march=x86-64 -ffreestanding -fomit-frame-pointer -fno-exceptions -fno-pic -fno-asynchronous-unwind-tables -fno-unwind-tables -Wall -Werror ${C_FILE} -o ${BUILD_DIR}/${FILENAME}.o 
         COMMENT "Compiling: ${FILENAME}"
         WORKING_DIRECTORY ${SRC_DIR}
     )
