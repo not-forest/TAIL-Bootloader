@@ -5,10 +5,6 @@
     and load the kernel itself.
 */
 
-// CPU defines
-#define _PIC_               // Using regular PIC instead of modern APIC.
-#define _VGA_INTERFACE_      // Output to regular VGA buffer.
-
 // Includes
 #include<stdint.h>
 
@@ -25,11 +21,6 @@
 #define SETTINGS 0b01
 #define TERMINAL 0b10
 #define INFO     0b11
-
-extern HANDLER_FN DIVBZ;
-extern HANDLER_FN PIC_TIMER;
-
-extern void remap_pic(uint8_t master_offset);
 
 void draw_loader();
 void init();
@@ -99,11 +90,4 @@ void init() {
 void draw_loader() {
 
 }
-
-// Executes when some assrtions fail.
-void __assert_fail (const char *__assertion, const char *__file, unsigned int __line, const char *__function) {
-    prints("Assertion failed: ", CURRENT_SETTINGS.color_set, &BUFF);
-    println(__assertion, CURRENT_SETTINGS.color_set, &BUFF);
-    for(;;);
-};
 
