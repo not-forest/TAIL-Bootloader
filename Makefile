@@ -1,4 +1,4 @@
-# Building script for the daemon binary.
+# Building script for the TAIL bootloader.
 
 # Target architecture
 ARCH ?= x86_64
@@ -12,12 +12,12 @@ LD := ld.bfd
 LDFLAGS += -nostdlib --nmagic
 
 # Directories and file definitions.
-DAEMON_DIR := $(abspath .)
-SRC_DIR := ${DAEMON_DIR}/src
-BUILD_DIR := ${DAEMON_DIR}/build
-DAEMON_ELF := ${BUILD_DIR}/daemon.elf
-DAEMON_BIN := ${BUILD_DIR}/daemon.bin
-IMG := ${BUILD_DIR}/daemon.img
+TAIL_DIR := $(abspath .)
+SRC_DIR := ${TAIL_DIR}/src
+BUILD_DIR := ${TAIL_DIR}/build
+TAIL_ELF := ${BUILD_DIR}/tail_bootloader.elf
+TAIL_BIN := ${BUILD_DIR}/tail_bootloader.bin
+IMG := ${BUILD_DIR}/tail_bootloader.img
 
 # Source files.
 SOURCE_C := $(wildcard $(SRC_DIR)/*.c)
@@ -59,20 +59,20 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@ 
 
 # Linking
-${DAEMON_ELF}: $(OBJECTS)
+${TAIL_ELF}: $(OBJECTS)
 	@echo "Linking..."
-	@cd $(BUILD_DIR) && cp $(SOURCE_LD) . && $(LD) -m elf_i386 -T linker.ld $(OBJ_C) -o ${DAEMON_ELF}
-	@objcopy -O binary ${DAEMON_ELF} ${DAEMON_BIN}
+	@cd $(BUILD_DIR) && cp $(SOURCE_LD) . && $(LD) -m elf_i386 -T linker.ld $(OBJ_C) -o ${TAIL_ELF}
+	@objcopy -O binary ${TAIL_ELF} ${TAIL_BIN}
 	@dd if=/dev/zero of=${IMG} bs=512 count=24
-	@dd if=${DAEMON_BIN} of=${IMG}
+	@dd if=${TAIL_BIN} of=${IMG}
 
 all: ${DAEMON_ELF}
 
-run: clean ${DAEMON_ELF}
+run: clean ${TAIL_ELF}
 ifeq ($(DEBUG), 1)
 	@qemu-system-x86_64 -drive format=raw,file=$(IMG) -m 1M -s -S -no-reboot -no-shutdown & 	
 	@echo "Waiting for QEMU to start..."
-	@gdb -ex "target remote :$(GDB_PORT)" -ex "symbol-file $(DAEMON_ELF)" -ex "layout asm"
+	@gdb -ex "target remote :$(GDB_PORT)" -ex "symbol-file $(TAIL_ELF)" -ex "layout asm"
 else
 	@qemu-system-x86_64 -drive format=raw,file=$(IMG) -m 1M -d int -no-reboot -no-shutdown 	
 endif
