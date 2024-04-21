@@ -2,7 +2,6 @@
  * This module declare types and constants which provide the most basic interface
  * to VGA buffer, which provides an output in form of text.
  * */
-#pragma once
 
 #ifndef _VGA_INTERFACE_
 #define _VGA_INTERFACE_
@@ -30,6 +29,14 @@
 #define COLOR_YELLOW 0xe
 #define COLOR_WHITE 0xf
 
+#define L_WARN COLOR_YELLOW
+#define L_OK   COLOR_GREEN
+#define L_INFO COLOR_WHITE
+#define L_ERROR COLOR_RED 
+
+#define OK "[OK]"
+#define FD "[FAILED]"
+
 // A struct that tracks the cursor to print out messages correctly.
 typedef struct {
     uint_fast8_t row, col;
@@ -39,10 +46,10 @@ typedef struct {
 
 The function is not suitable for switching rows, but only shift to a
 given location. Values must be within the height of the buffer. */
-extern void vga_shift(uint_fast8_t old, uint_fast8_t new);
+void vga_shift(uint_fast8_t old, uint_fast8_t new);
 /* Swaps two rows instead of shifting one to another. 
 The swapping is done via XOR operation for each bit*/
-extern void vga_swap(uint_fast8_t old, uint_fast8_t new);
+void vga_swap(uint_fast8_t old, uint_fast8_t new);
 
 /* Prints out a single char by writing the data into the buffer.
 
@@ -53,25 +60,25 @@ character will be bright.
 
 It will always return 1 as long as it will not receive a null character.*/
 __attribute__((no_caller_saved_registers))
-extern int printc(const unsigned char c, uint8_t color_set, volatile VGABuffer* vga);
+int printc(const unsigned char c, uint8_t color_set, volatile VGABuffer* vga);
 /* Prints the provided string into the buffer.
 
 The provided atributes are used to every symbol within the string. */
 __attribute__((no_caller_saved_registers))
-extern void prints(const char* str, uint8_t color_set, volatile VGABuffer* vga);
+void prints(const char* str, uint8_t color_set, volatile VGABuffer* vga);
 
 /* Works the same as the regular 'prints' except that is adds a newline symbol. */
 __attribute__((no_caller_saved_registers))
-extern void println(const char* str, uint8_t color_set, volatile VGABuffer* vga);
+void println(const char* str, uint8_t color_set, volatile VGABuffer* vga);
 // Disables the cursor in the VGA mode.
-extern void disable_cursor();
+void disable_cursor();
 
 /* Enables the cursor, with given start and end
 
 The start and end values are basically describe the height by rows of the cursor. The
 start must be smaller than end for cursor to be visible. The maximum value of both
 start and end is 15.*/
-extern void enable_cursor(uint8_t cursor_start, uint8_t cursor_end);
+void enable_cursor(uint8_t cursor_start, uint8_t cursor_end);
 // Updates the cursor location.
 void update_cursor(uint8_t row, uint8_t col);
 

@@ -5,89 +5,62 @@
     and load the kernel itself.
 */
 
-// Includes
-#include<stdint.h>
+extern void *IDT_TABLE[];       // IDT TABLE defined in idt.asm 
 
-#include"memory_map.h"
+#define __PIC_MASTER_OFFSET__ 32
 
-#include"io/vga.h"
-
-#include"cpu/pic.h"
-#include"cpu/int.h"
-#include"cpu/handlers.h"
-
-// Screen definitions.
-#define LOADER   0b00
-#define SETTINGS 0b01
-#define TERMINAL 0b10
-#define INFO     0b11
-
-void draw_loader();
-void init();
+#include <stdint.h>
+#include "arch/idt.h"
+#include "arch/pic.h"
+#include "vga.h"
 
 // A global static buffer.
-volatile VGABuffer BUFF = {.row = 0, .col = 0};
+volatile VGABuffer LOGGER = {.row = 0, .col = 0};
 
-/* A global variable that provide the settings information.
- *
- * The lower four bits decide about the text color, the next four bits are the background
- * color and the last two bits are the current user's screen. This can be changed via 
- * settings screen. 
- *
- * */
-volatile union {
-    struct {
-        uint8_t fr: 4;
-        uint8_t bg: 4;
-        uint8_t screen: 2; 
-    } fields;
-    uint8_t color_set;
-    uint16_t data;
-} CURRENT_SETTINGS = { .fields.fr = COLOR_WHITE, .fields.bg = COLOR_BLACK, .fields.screen = LOADER };
-
-// The main entry. The boot drive argument is pushed from the HEAD part (mbr boot sector).
+/* Main daemon entry point. */
 void main(uint16_t boot_drive) {
-    // Initialize
-    init();
-    // TUI
-    draw_loader();  // Drawing the loader screen first.
+    disable_cursor(); 
 
-    for(;;) wfi();  // Waits for interrupt
+#if !__RELEASE__
+    prints("Initializing... ", L_INFO, &LOGGER); 
+#endif
+
+    /* Beginning of daemon post initialization */
+    
+    idt_init();                             // Intializing the IDT.
+    remap_pic(__PIC_MASTER_OFFSET__);       // Remapping PIC controller.
+
+    /* End of initialization */
+    
+#if !__RELEASE__
+    println(OK, L_OK, &LOGGER);
+#endif
+
+    for(;;) __asm__ ("sti; hlt");
 }
 
-// Initialize the bootloader itself. This does not affect the future OS.
-void init() {
-    // Defining the new IDT.
-    IDT idt;
+/* Initializing the IDT and putting required handler functions within */
+void idt_init() {
     uint16_t cs;
+    uint8_t vec;
 
     // Reading the cs segment.
     __asm__("mov %%cs, %w0\n":"=a"(cs)::"memory");
 
-    // Defining the interrupt and exception handlers. 
-    idt.vector_table[0] = (GateDescriptor) { 
-        .offset_0_15 = DIVBZ.bits[0],
-        .selector = cs,
-        .reserved = 0,
-        .attr = TRAP_GATE, 
-        .offset_16_31 = DIVBZ.bits[1],
-    }; 
-    
-    idt.vector_table[32] = (GateDescriptor) { 
-        .offset_0_15 = PIC_TIMER.bits[0],
-        .selector = cs,
-        .reserved = 0,
-        .attr = INT_GATE, 
-        .offset_16_31 = PIC_TIMER.bits[1],
-    };
+    // Providing exceptions.
+    for (vec = 0; vec < 32; vec++) {
+        idt_set_descriptor(vec, (ISR_F)IDT_TABLE[vec], TRAP_GATE, cs);
+    }
+    // Providing interrupts.
+    for (; vec < 255; vec++) {
+        idt_set_descriptor(vec, (ISR_F)IDT_TABLE[vec], INT_GATE, cs);
+    }
 
-    // Final initialization functions.
-    lidt(&idt); // Setting the amount of interrupts needed for the bootloader.
-    remap_pic(32); // Mapping the PIC software interrupts to 32th index of the IDT.
+    // Creating a pointer for lidt instruction
+    struct {
+        uint16_t length;
+        void*    base;
+    } __attribute__((packed)) IDTR = { .length = sizeof(IDT) - 1, .base =  &IDT };
+ 
+    __asm__ ( "lidt %0" : : "m"(IDTR) );
 }
-
-// Draws the main menu of the loader.
-void draw_loader() {
-
-}
-

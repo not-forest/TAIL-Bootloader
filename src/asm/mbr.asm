@@ -1,11 +1,3 @@
-;                      A boot loader assembly part.
-;
-;   This is called HEAD, and it will be the entry point which is defined in the
-;   master boot at 0x7C00. The BIOS will jump to that location once the boot is
-;   done. 
-;
-
-
 ; Extern functions
 extern main
 
@@ -22,15 +14,15 @@ _start:
     mov es, ax              ; Clear the es segment
     mov ss, ax              ; Zeroing the stack segment
 
-    mov sp, _MBRROM_ADDR_ ; Setup stack to grow below the bootloader.
+    mov sp, _MBRROM_ADDR_   ; Setup stack to grow below the bootloader.
 
     mov [_BOOT_DRIVE_], dl  ; BIOS sets the boot drive in 'dl' reg.
 
     mov al, 0x03            ; Clearing the screen while we are still in real mode.
     int 10h                 ; Make BIOS to clean the screen.
 
-    ; The tail must be loaded like any other kernel as it is a small 32bit OS.
-    call _load_tail
+    ; The TAIL must be loaded like any other kernel as it is a small 32bit OS.   
+    call _load_daemon
     ; Switching to protected mode here, as almost all kernels are running in
     ; this mode. The TAIL also runs in protected mode.
     call _switch_protected
@@ -42,12 +34,12 @@ _start:
 %include "disk.asm"
 
 ; Reads the location of the second stage and loads it as a small kernel.
-_load_tail:
+_load_daemon:
     ; Preparing data for BIOS. The BIOS needs to know where to start reading,
     ; how much to read, and where to store the data in memory.
-    mov bx, _APPROM_ADDR_  ; Tail address
-    mov dh, 0x02           ; Amount of sectors
-    mov dl, [_BOOT_DRIVE_] ; Making sure the dl has the disk info from BIOS.
+    mov bx, _APPROM_ADDR_       ; Tail address
+    mov dh, _SECTORS_AMOUNT_    ; Amount of sectors to read.
+    mov dl, [_BOOT_DRIVE_]      ; Making sure the dl has the disk info from BIOS.
 
     call _load_disk         ; With register set, calling the disk operation.
     ret
@@ -70,17 +62,18 @@ _init_protected:
     mov fs, ax
     mov gs, ax
 
-    mov esp, _BOOTLOADER_STACK_ ; Setting up a new stack
+    mov esp, _STACK_TOP_ ; Setting up a new stack
 
     mov eax, [_BOOT_DRIVE_]  ; Getting a selected drive info.
     push eax
 
-    call main                ; Jump to the second stage of the bootloader.
+    call main                ; Jump to the main application space.
     jmp $
 
 _BOOT_DRIVE_ db 0
 
 ; Extern variables
-extern _MBRROM_ADDR_ ; Head addr.
-extern _APPROM_ADDR_ ; Tail addr.
-extern _BOOTLOADER_STACK_ ; Tail's stack top.
+extern _SECTORS_AMOUNT_
+extern _MBRROM_ADDR_ 
+extern _APPROM_ADDR_ 
+extern _STACK_TOP_

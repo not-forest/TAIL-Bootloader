@@ -3,8 +3,8 @@
  * */
 
 #include<stdint.h>
-#include"pic.h"
-#include"int.h"
+#include"arch/pic.h"
+#include"arch/cpu.h"
 
 /* 
  * Small function that remaps PIC's int vectors, so that it will send interrupts
@@ -41,5 +41,5 @@ void remap_pic(uint8_t master_offset) {
  * */
 __attribute__((no_caller_saved_registers)) 
 void end_of_interrupt(uint16_t port) {
-    outb(PIC1_COMMAND, 0x20); // OCW2: telling the chosen PIC.
+    outb(port, PIC_EOI); // OCW2: telling the chosen PIC.
 }

@@ -4,10 +4,9 @@
  * The amount of defines are enough to implement the most important part
  * of its use, which allows for future interrupts.
  * */
-#pragma once
 
-#ifndef _PIC_
-#define _PIC_
+#ifndef __PIC__h
+#define __PIC__h
 
 #include<stdint.h>
 

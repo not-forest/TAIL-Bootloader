@@ -1,9 +1,10 @@
 /* 
- * This module provides operations with VGA Buffer. The bootloader should not 
- * define some crazy abstractions of the way how it should comunicate with ports, 
- * therefore the small implementation is enough to provide information to the user.
+ * This module provides operations with VGA Buffer as the main logging
+ * interface. More complicated graphics are not required due to debug only
+ * purposes.
  * */
 
+#if !__RELEASE__
 #include<stdint.h>
 #include"vga.h"
 
@@ -24,7 +25,7 @@ void vga_shift(uint_fast8_t old, uint_fast8_t new) {
 
 /* Swaps two rows instead of shifting one to another. 
 
-The swapping is done via XOR operation for each bit*/
+The swapping is done via xchg instruction. */
 void vga_swap(uint_fast8_t old, uint_fast8_t new) {
     // Pointer to old row buffer.
     volatile uint16_t* old_ptr = (volatile uint16_t*)BUFFER_PTR + old * BUFFER_WIDTH;
@@ -101,80 +102,4 @@ void println(const char* str, uint8_t color_set, volatile VGABuffer* vga) {
     ++vga->row;
 }
 
-// Disables the cursor in the VGA mode.
-void disable_cursor() {
-	__asm__ volatile (
-        "mov $0x3d4, %%dx\n"
-        "mov $0xa, %%al\n"
-        "out %%al, %%dx\n"
-        
-        "inc %%dx\n"
-        "mov $0x20, %%al\n"
-        "out %%al, %%dx"
-
-        :
-        :
-        : "dx", "al", "memory"
-    );
-}
-
-/* Enables the cursor, with given start and end
-
-The start and end values are basically describe the height by rows of the cursor. The
-start must be smaller than end for cursor to be visible. The maximum value of both
-start and end is 15.*/
-void enable_cursor(uint8_t cursor_start, uint8_t cursor_end) {
-    __asm__ volatile (
-        // Setting up the cursor's start
-        "mov $0x3d4, %%dx\n"
-        "mov $0xa, %%al\n"
-        "out %%al, %%dx\n"
-
-        "inc %%dx\n"
-        "inb %%dx, %%al\n"
-        "and $0xc0, %%al\n"
-        "or %0, %%al\n"
-        "out %%al, %%dx\n"
-
-        // Setting up the cursor's start
-        "mov $0x3d4, %%dx\n"
-        "mov $0xb, %%al\n"
-        "out %%al, %%dx\n"
-
-        "inc %%dx\n"
-        "inb %%dx, %%al\n"
-        "and $0xe0, %%al\n"
-        "or %1, %%al\n"
-        "out %%al, %%dx\n"
-
-        :
-        : "r" (cursor_start), "r" (cursor_end)
-        : "dx", "al", "memory"
-    );
-}
-
-// Updates the cursor location based on a row and column value.
-void update_cursor(uint8_t row, uint8_t col) {
-    uint16_t pos = row * BUFFER_WIDTH + col;
-    __asm__ volatile (
-        // Moving the cursor
-        "mov $0x03d4, %%dx\n"
-        "mov $0x0f, %%al\n"
-        "out %%al, %%dx\n"
-
-        "inc %%dl\n"
-        "mov %%bl, %%al\n"
-        "out %%al, %%dx\n"
-
-        "dec %%dl\n"
-        "mov $0x0e, %%al\n"
-        "out %%al, %%dx\n"
-
-        "inc %%dl\n"
-        "mov %%bh, %%al\n"
-        "out %%al, %%dx\n"
-        :
-        : "b"(pos)
-        : "memory"
-    );
-}
+#endif

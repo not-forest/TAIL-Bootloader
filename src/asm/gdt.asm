@@ -1,8 +1,9 @@
-;           Here we define the GDT and set it up properly
+;           Here GDT is defined and set up
 ;
-;   The simplest flat memory model for the second stage of the bootloader.
-;   The second stage (TAIL) will make different tweaks later based on the
-;   required settings by the loaded kernel.
+;   The simplest flat memory model is enough for the main application
+;   part, because it will allow to send a bigger amount of data to the
+;   backend without the need of additional overhead, like paging memory
+;   model for long mode.
 
 section .text
 bits 16
