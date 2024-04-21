@@ -30,5 +30,5 @@ PIC support is added for now. The TAIL part of the bootloader runs if primitivel
 
 1. To compile: make compile
 2. Run in QEMU with gdb debugging: make run
-3. Run in QEMU without gdb (interrupts are shown): make run_int
+3. Run in QEMU without gdb (interrupts are shown): make run DEBUG=0
 
