@@ -10,6 +10,7 @@ section .text
     global update_cursor
     global enable_cursor
     global disable_cursor
+    global itoa
 bits 32
 
 ; Updates the VGA cursor location based on a row and column value.
@@ -83,3 +84,101 @@ enable_cursor:
     out dx, al          ; Write updated cursor end value
 
     ret
+
+section .rodata
+
+;
+; Conversion table for __itoa.
+; Works for bases [2 ... 36].
+;
+__itoacvt:
+    db '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+section .text
+
+; Convenience wrapper for __itoa.
+; Takes two arguments from the C call: the integer to convert and the base.
+; Returns a pointer to the null-terminated string stored in __itoabuf32.
+;
+; Parameters:
+;   eax -> Integer to convert (int n)
+;   ecx -> Base (e.g. 10 for decimal, 16 for hex)
+;
+itoa:
+    push ebx
+
+    ; Move arguments to the appropriate registers
+    mov dword eax, [esp + 8] ; Load the integer to convert (n)
+    mov dword ecx, [esp + 12] ; Load the base (e.g., 10 for decimal)
+    mov dword ebx, __itoabuf32 ; Set the destination buffer to __itoabuf32
+
+    call __itoa         ; Call the internal itoa conversion
+
+    mov eax, __itoabuf32 ; Return the pointer to the buffer
+
+    pop ebx
+    ret
+
+;
+; Routine to convert a 32-bit integer to a string.
+; Registers are preserved.
+;
+; EAX: Source integer
+; EBX: Target address
+; ECX: Base
+;
+__itoa:
+.start:
+    push eax
+    push ebx
+    push ecx
+    push edx
+    mov edx, ecx
+    mov ecx, ebx
+.checknegative:
+    test eax, eax
+    jns .divrem
+    mov byte [ecx], 0x2D
+    inc ecx
+    mov ebx, ecx
+    neg eax
+.divrem:
+    push edx
+    push ecx
+    mov ecx, edx
+    xor edx, edx
+    div ecx
+    mov byte dl, [__itoacvt + edx]
+    pop ecx
+    mov byte [ecx], dl
+    pop edx
+    inc ecx
+    cmp eax, 0x00
+    jne .divrem
+    mov byte [ecx], 0x00
+    dec ecx
+.reverse:
+    cmp ebx, ecx
+    jge .end
+    mov byte dl, [ebx]
+    mov byte al, [ecx]
+    mov byte [ebx], al
+    mov byte [ecx], dl
+    inc ebx
+    dec ecx
+    jmp .reverse
+.end:
+    pop edx
+    pop ecx
+    pop ebx
+    pop eax
+    ret
+   
+section .bss
+
+;
+; Buffer to store the result of __itoa in.
+;
+align 64
+__itoabuf32:
+    resb 36
