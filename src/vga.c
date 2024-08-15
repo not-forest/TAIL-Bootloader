@@ -99,7 +99,22 @@ __attribute__((no_caller_saved_registers))
 void println(const char* str, uint8_t color_set, volatile VGABuffer* vga) {
     prints(str, color_set, vga);
     vga->col = 0;
-    ++vga->row;
+    if (vga->row + 1 >= BUFFER_HEIGHT) {
+        /* Shifting each row up. */
+        for(uint8_t r = 1; r < BUFFER_HEIGHT; ++r) {
+            vga_shift(r, r - 1);
+        }
+    } else {
+        ++vga->row;
+    }
+}
+
+// Concats two strings literals.
+char* bstrcat(char* dest, char* src)
+{
+     while (*dest) dest++;
+     while (*src) *dest++ = *src++;
+     return --dest;
 }
 
 #endif

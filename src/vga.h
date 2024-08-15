@@ -82,5 +82,7 @@ void enable_cursor(uint8_t cursor_start, uint8_t cursor_end);
 // Updates the cursor location.
 void update_cursor(uint8_t row, uint8_t col);
 
+// Concats two strings literals.
+char* bstrcat(char* dest, char* src);
 
 #endif
