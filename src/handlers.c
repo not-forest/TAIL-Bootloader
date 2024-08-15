@@ -12,6 +12,15 @@
 #include "insc.h"
 #include "vga.h"
 
+#include <stdint.h>
+
+extern char* itoa(int, int); // From insc.asm
+
+// Timeout that defines delay before the first listed OS will be automatically picked. Zero means no timeout.
+#ifndef DEF_TIMEOUT
+#define DEF_TIMEOUT 0
+#endif
+
 extern VGABuffer LOGGER;
 
 /* Halts the whole application completely. */
@@ -25,22 +34,27 @@ void GENERAL_HANDLER(struct Iframe *frame) {
 }
 
 #if !__RELEASE__
+uint8_t dbg_cnt = 0;
+
 /* Debug handler. (Debug build only)
  *
- * 
+ * Writes current breakpoint's number and continues program on next keyboard interrupt
  * */
 void BREAKPOINT_HANDLER(struct Iframe *frame) {
-    
+    println(bstrcat("Breakpoint № : ", itoa(dbg_cnt, 10)), L_INFO, &LOGGER);
 }
 #endif
 
-/* Handles most of IO events by checking the buffered data obtained from 
- * mobile's backend. */
+/* Handles an event that is being called on each PIC's clock tick. */
 void SOFTWARE_TIMER_HANDLER(struct Iframe *frame) { 
     ++GLOBAL_TIMER.bits;
 
+    if (DEF_TIMEOUT && GLOBAL_TIMER.bits > DEF_TIMEOUT) {
+        // TODO GLOBAL BOOLEAN
+    }
+
 #if !__RELEASE__
-    printc('A', L_INFO, &LOGGER);
+    println(itoa(GLOBAL_TIMER.bits, 10), L_INFO, &LOGGER);
 #endif
 
     end_of_interrupt(PIC1_COMMAND);
