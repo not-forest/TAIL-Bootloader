@@ -12,10 +12,21 @@ extern void *IDT_TABLE[];       // IDT TABLE defined in idt.asm
 #include <stdint.h>
 #include "arch/idt.h"
 #include "arch/pic.h"
+#include "insc.h"
 #include "vga.h"
+
+void init_menu(void);
+
+// Contain all provided addresses of installed operating systems.
+#ifdef ARRAY_ADDRS
+static uint64_t ADDRS[] = { ARRAY_ADDRS };
+#endif
 
 // A global static buffer.
 volatile VGABuffer LOGGER = {.row = 0, .col = 0};
+
+// Jump pointer to OS selected by user.
+uint64_t jptr;
 
 /* Main daemon entry point. */
 void main(uint16_t boot_drive) {
@@ -36,7 +47,14 @@ void main(uint16_t boot_drive) {
     println(OK, L_OK, &LOGGER);
 #endif
 
-    for(;;) __asm__ ("sti; hlt");
+    init_menu();    // Holds user in menu until the OS is not selected or timed-out
+
+#ifdef ADDRS
+    // Forwarding control to the OS.
+    __asm__ ("jmp %0" : "=r" (jptr)); 
+#endif
+
+    for(;;) __asm__ ("hlt");           // Halts the bootloader if no addres was selected. 
 }
 
 /* Initializing the IDT and putting required handler functions within */
@@ -63,4 +81,13 @@ void idt_init() {
     } __attribute__((packed)) IDTR = { .length = sizeof(IDT) - 1, .base =  &IDT };
  
     __asm__ ( "lidt %0" : : "m"(IDTR) );
+}
+
+// Initializes the main TUI menu for choosing the OS. 
+void init_menu() {
+    __asm__ ("sti");
+
+
+
+    while (os_id == UNSELECTED);    // Interrupt driven, until the OS is selected or timeout.
 }
