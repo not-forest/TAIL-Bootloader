@@ -72,6 +72,8 @@ __attribute__((no_caller_saved_registers))
 void println(const char* str, uint8_t color_set, volatile VGABuffer* vga);
 // Disables the cursor in the VGA mode.
 void disable_cursor();
+// Cleans the buffer.
+void vga_clean();
 
 /* Enables the cursor, with given start and end
 

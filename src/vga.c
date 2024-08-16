@@ -7,6 +7,12 @@
 #include<stdint.h>
 #include"vga.h"
 
+/* Cleans the VGA buffer fully. */
+void vga_clean() {
+    uint16_t* ptr = (uint16_t*)BUFFER_PTR;
+    while(ptr < (uint16_t*)(BUFFER_PTR + BUFFER_WIDTH * BUFFER_HEIGHT)) *ptr++ = 0; 
+}
+
 /* Shifts the values in the buffer by rows 
 The function is not suitable for switching rows, but only shift to a
 given location. Values must be within the height of the buffer. */
@@ -70,7 +76,7 @@ int printc(const unsigned char c, uint8_t color_set, volatile VGABuffer* vga) {
     /* Checking the buffer bounds */
     if (c == '\n' || ++vga->col >= BUFFER_WIDTH) {
         vga->col = 0;
-        if (vga->row + 1 >= BUFFER_HEIGHT) {
+        if (vga->row + 1 > BUFFER_HEIGHT) {
             /* Shifting each row up. */
             for(uint8_t r = 1; r < BUFFER_HEIGHT; ++r) {
                 vga_shift(r, r - 1);
