@@ -35,13 +35,18 @@ void GENERAL_HANDLER(struct Iframe *frame) {
 
 #if !__RELEASE__
 uint8_t dbg_cnt = 0;
+uint8_t dbg_halt = 0;
 
 /* Debug handler. (Debug build only)
  *
  * Writes current breakpoint's number and continues program on next keyboard interrupt
  * */
 void BREAKPOINT_HANDLER(struct Iframe *frame) {
-    println(bstrcat("Breakpoint № : ", itoa(dbg_cnt, 10)), L_INFO, &LOGGER);
+    prints("Breakpoint № : ", L_INFO, &LOGGER);
+    println(itoa(dbg_cnt, 10), L_INFO, &LOGGER);
+    
+    dbg_halt = 1;
+    while (dbg_halt);
 }
 #endif
 
@@ -49,19 +54,18 @@ void BREAKPOINT_HANDLER(struct Iframe *frame) {
 void SOFTWARE_TIMER_HANDLER(struct Iframe *frame) { 
     ++GLOBAL_TIMER.bits;
 
-    if (DEF_TIMEOUT && GLOBAL_TIMER.bits > DEF_TIMEOUT) {
-        // TODO GLOBAL BOOLEAN
-    }
-
-#if !__RELEASE__
-    println(itoa(GLOBAL_TIMER.bits, 10), L_INFO, &LOGGER);
-#endif
+    if (DEF_TIMEOUT && GLOBAL_TIMER.bits > DEF_TIMEOUT)
+        os_id = 0;  // Selecting the first entry on timeout.
 
     end_of_interrupt(PIC1_COMMAND);
 }
 
 void SOFTWARE_KEYBOARD_HANDLER(struct Iframe *frame) {
     // IO logic...
+    
+#if !__RELEASE__
+    dbg_halt = 0;
+#endif
 
     end_of_interrupt(PIC1_COMMAND);
 }
