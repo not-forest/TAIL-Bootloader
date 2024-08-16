@@ -16,11 +16,6 @@
 
 extern char* itoa(int, int); // From insc.asm
 
-// Timeout that defines delay before the first listed OS will be automatically picked. Zero means no timeout.
-#ifndef DEF_TIMEOUT
-#define DEF_TIMEOUT 0
-#endif
-
 extern VGABuffer LOGGER;
 
 /* Halts the whole application completely. */
@@ -50,12 +45,34 @@ void BREAKPOINT_HANDLER(struct Iframe *frame) {
 }
 #endif
 
+#if _DEF_TIMEOUT_ != 0
+uint8_t timer_num_places(uint16_t val) {
+    if (val < 10) return 0;
+    if (val < 100) return 1;
+    if (val < 10000) return 2;
+    __builtin_unreachable();
+}
+#endif
+
 /* Handles an event that is being called on each PIC's clock tick. */
 void SOFTWARE_TIMER_HANDLER(struct Iframe *frame) { 
     ++GLOBAL_TIMER.bits;
 
-    if (DEF_TIMEOUT && GLOBAL_TIMER.bits > DEF_TIMEOUT)
+
+// Timeout that defines delay before the first listed OS will be automatically picked. Zero means no timeout.
+#if _DEF_TIMEOUT_ != 0
+    if (_DEF_TIMEOUT_ && GLOBAL_TIMER.bits > _DEF_TIMEOUT_)
         os_id = 0;  // Selecting the first entry on timeout.
+
+    // Getting current cursor's location and writing updated time.
+    uint8_t row = LOGGER.row, col = LOGGER.row;
+    uint16_t time_left = _DEF_TIMEOUT_ - GLOBAL_TIMER.bits;
+    LOGGER = (VGABuffer) { .row = 1, .col = BUFFER_WIDTH - 5};
+    prints("    ", COLOR_WHITE, &LOGGER);
+    LOGGER.col = BUFFER_WIDTH - 3 - timer_num_places(time_left);
+    prints(itoa(time_left, 10), COLOR_MAGENTA, &LOGGER);
+    LOGGER = (VGABuffer) { .row = row, .col = col };
+#endif
 
     end_of_interrupt(PIC1_COMMAND);
 }

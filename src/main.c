@@ -92,8 +92,8 @@ void init_menu() {
     while (os_id == UNSELECTED);    // Interrupt driven, until the OS is selected or timeout.
 }
 
-void line() {
-    for (uint8_t i = 0; i < BUFFER_WIDTH - 2; ++i)
+void line(uint8_t amount) {
+    for (uint8_t i = 0; i < amount; ++i)
         printc('\xcd', COLOR_WHITE, &LOGGER);
 }
 
@@ -116,16 +116,16 @@ void draw_menu() {
     vga_clean();
 
     printc('\xc9', COLOR_WHITE, &LOGGER);
-    line();
-    printc('\xbb', COLOR_WHITE, &LOGGER);
+    line(BUFFER_WIDTH - 7);
+    prints("\xcb\xcd\xcd\xcd\xcd\xbb", COLOR_WHITE, &LOGGER);
 
     prints("\xba TAIL V.0.1", COLOR_WHITE, &LOGGER);
-    LOGGER.col = BUFFER_WIDTH - 1;
-    printc('\xba', COLOR_WHITE, &LOGGER);
+    LOGGER.col = BUFFER_WIDTH - 6;
+    prints("\xba XX \xba", COLOR_WHITE, &LOGGER);
 
     printc('\xcc', COLOR_WHITE, &LOGGER);
-    line();
-    printc('\xb9', COLOR_WHITE, &LOGGER);
+    line(BUFFER_WIDTH - 7);
+    prints("\xca\xcd\xcd\xcd\xcd\xb9", COLOR_WHITE, &LOGGER);
 
     prints("\xba  Select the OS to load:", COLOR_WHITE, &LOGGER);
     LOGGER.col = BUFFER_WIDTH - 1;
@@ -140,14 +140,14 @@ void draw_menu() {
     walls();
 
     printc('\xcc', COLOR_WHITE, &LOGGER);
-    line();
+    line(BUFFER_WIDTH - 2);
     printc('\xb9', COLOR_WHITE, &LOGGER);
 
     walls();
     walls();
 
     printc('\xc8', COLOR_WHITE, &LOGGER);
-    line();
+    line(BUFFER_WIDTH - 2);
     printc('\xbc', COLOR_WHITE, &LOGGER);
 
     print_hint("Use arrow keys to change the cursor. Press 'i' for more info or 's' to open\n" 
