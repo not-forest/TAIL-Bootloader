@@ -4,7 +4,6 @@
  * purposes.
  * */
 
-#if !__RELEASE__
 #include<stdint.h>
 #include"vga.h"
 
@@ -97,24 +96,5 @@ void prints(const char* str, uint8_t color_set, volatile VGABuffer* vga) {
 /* Works the same as the regular 'prints' except that is adds a newline symbol. */
 __attribute__((no_caller_saved_registers))
 void println(const char* str, uint8_t color_set, volatile VGABuffer* vga) {
-    prints(str, color_set, vga);
-    vga->col = 0;
-    if (vga->row + 1 >= BUFFER_HEIGHT) {
-        /* Shifting each row up. */
-        for(uint8_t r = 1; r < BUFFER_HEIGHT; ++r) {
-            vga_shift(r, r - 1);
-        }
-    } else {
-        ++vga->row;
-    }
+    prints(str, color_set, vga); prints("\n", color_set, vga);
 }
-
-// Concats two strings literals.
-char* bstrcat(char* dest, char* src)
-{
-     while (*dest) dest++;
-     while (*src) *dest++ = *src++;
-     return --dest;
-}
-
-#endif
