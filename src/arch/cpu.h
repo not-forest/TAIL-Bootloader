@@ -10,7 +10,7 @@
 /* 
  *  A special struct that is being pushed to the stack by CPU when some exception or interrupt occurs.
  *
- *  Daemon is running in 32-bit protected mode to support or types of devices and to not cause overhead
+ *  Bootloader is running in 32-bit protected mode to support or types of devices and to not cause overhead
  *  of long mode. Because of that only three registers will be pushed onto the stack during an interrupt.
  * */
 struct Iframe {
@@ -74,9 +74,6 @@ general_handler(SECURITY_EXCEPTION_HANDLER);
 
 /* * * * * * * * * * * * * * * * * * * *
  *  SOFTWARE INTERRUPTS (vecn: 32 - 255)
- *
- *  Defined by this daemon and can only be cause via certain pheripherals like PIC or
- *  via software part itself.
  * * * * * * * * * * * * * * * * * * * */
 general_handler(SOFTWARE_TIMER_HANDLER);
 general_handler(SOFTWARE_KEYBOARD_HANDLER);
