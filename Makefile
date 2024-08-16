@@ -5,6 +5,7 @@ ARCH ?= x86_64
 
 # Local makefile variables
 DEBUG ?= 1
+TIMEOUT ?= 0
 
 # Toolchain config
 CC := gcc
@@ -33,7 +34,7 @@ OBJECTS := $(OBJ_C) $(OBJ_ASM)
 GDB_PORT := 1234
 
 # CFLAGS
-CFLAGS += -RELEASE -mgeneral-regs-only -c -m32 -D__KERNEL__
+CFLAGS += -RELEASE -mgeneral-regs-only -c -m32 -D__KERNEL__ -D_DEF_TIMEOUT_=$(TIMEOUT)
 CFLAGS += -march=x86-64 -ffreestanding -fomit-frame-pointer -fno-exceptions -fno-pic
 CFLAGS += -fno-asynchronous-unwind-tables -fno-unwind-tables -Wall -Werror
 
