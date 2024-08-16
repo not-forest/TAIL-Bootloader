@@ -16,6 +16,7 @@ extern void *IDT_TABLE[];       // IDT TABLE defined in idt.asm
 #include "vga.h"
 
 void init_menu(void);
+void draw_menu(void);
 
 // Contain all provided addresses of installed operating systems.
 #ifdef ARRAY_ADDRS
@@ -66,7 +67,7 @@ void idt_init() {
     __asm__("mov %%cs, %w0\n":"=a"(cs)::"memory");
 
     // Providing exceptions.
-    for (vec = 0; vec < 32; vec++) {
+    for (vec = 0; vec < 255; vec++) {
         idt_set_descriptor(vec, (ISR_F)IDT_TABLE[vec], TRAP_GATE, cs);
     }
     // Providing interrupts.
@@ -85,9 +86,70 @@ void idt_init() {
 
 // Initializes the main TUI menu for choosing the OS. 
 void init_menu() {
+    draw_menu();
+
     __asm__ ("sti");
-
-
-
     while (os_id == UNSELECTED);    // Interrupt driven, until the OS is selected or timeout.
+}
+
+void line() {
+    for (uint8_t i = 0; i < BUFFER_WIDTH - 2; ++i)
+        printc('\xcd', COLOR_WHITE, &LOGGER);
+}
+
+void walls() {
+    printc('\xba', COLOR_WHITE, &LOGGER);
+    LOGGER.col = BUFFER_WIDTH - 1;
+    printc('\xba', COLOR_WHITE, &LOGGER);
+}
+
+// Prints a short hint in the bottom box.
+void print_hint(char* info) {
+    LOGGER.row = BUFFER_HEIGHT - 3;
+    LOGGER.col = 3;
+    prints(info, COLOR_YELLOW, &LOGGER);
+}
+
+/* Draws the select menu itself */
+void draw_menu() {
+    LOGGER = (VGABuffer) {.row = 0, .col = 0};
+    vga_clean();
+
+    printc('\xc9', COLOR_WHITE, &LOGGER);
+    line();
+    printc('\xbb', COLOR_WHITE, &LOGGER);
+
+    prints("\xba TAIL V.0.1", COLOR_WHITE, &LOGGER);
+    LOGGER.col = BUFFER_WIDTH - 1;
+    printc('\xba', COLOR_WHITE, &LOGGER);
+
+    printc('\xcc', COLOR_WHITE, &LOGGER);
+    line();
+    printc('\xb9', COLOR_WHITE, &LOGGER);
+
+    prints("\xba  Select the OS to load:", COLOR_WHITE, &LOGGER);
+    LOGGER.col = BUFFER_WIDTH - 1;
+    printc('\xba', COLOR_WHITE, &LOGGER);
+
+    for (uint8_t i = 0; i < 16; ++i) {
+        printc('\xba', COLOR_WHITE, &LOGGER);
+        prints("  --------------------------------------------------------------------------  ", COLOR_DARKGRAY, &LOGGER);
+        printc('\xba', COLOR_WHITE, &LOGGER);
+    }
+
+    walls();
+
+    printc('\xcc', COLOR_WHITE, &LOGGER);
+    line();
+    printc('\xb9', COLOR_WHITE, &LOGGER);
+
+    walls();
+    walls();
+
+    printc('\xc8', COLOR_WHITE, &LOGGER);
+    line();
+    printc('\xbc', COLOR_WHITE, &LOGGER);
+
+    print_hint("Use arrow keys to change the cursor. Press 'i' for more info or 's' to open\n" 
+               "   a settings menu. Press 't' to open a terminal.");
 }
