@@ -64,9 +64,8 @@ int printc(const unsigned char c, uint8_t color_set, volatile VGABuffer* vga) {
         return 0;
     }
     
-    /* Special case for new line and space characters */
-    if (c != '\n' && c != ' ') {
-        // Pointer to the VGA buffer.
+    /* Ignored for new line */
+    if (c != '\n') {
         volatile uint16_t* buf = (volatile uint16_t*)BUFFER_PTR + (vga->row * BUFFER_WIDTH + vga->col);
         uint16_t char_set = (color_set << 8) | c; // Creating a formatted char for buffer.
 
