@@ -67,9 +67,10 @@ void SOFTWARE_TIMER_HANDLER(struct Iframe *frame) {
     // Getting current cursor's location and writing updated time.
     uint8_t row = LOGGER.row, col = LOGGER.row;
     uint16_t time_left = _DEF_TIMEOUT_ - GLOBAL_TIMER.bits;
-    LOGGER = (VGABuffer) { .row = 1, .col = BUFFER_WIDTH - 5};
-    prints("    ", COLOR_WHITE, &LOGGER);
-    LOGGER.col = BUFFER_WIDTH - 3 - timer_num_places(time_left);
+
+    *(uint64_t *)(BUFFER_PTR + BUFFER_WIDTH * 4 - 10) = 0;
+
+    LOGGER = (VGABuffer) { .row = 1, .col = BUFFER_WIDTH - 3 - timer_num_places(time_left) };
     prints(itoa(time_left, 10), COLOR_MAGENTA, &LOGGER);
     LOGGER = (VGABuffer) { .row = row, .col = col };
 #endif
