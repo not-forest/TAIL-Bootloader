@@ -47,10 +47,10 @@ SECTIONS
     {
         KEEP(*(.vectors*))
         *(.text*)
-        /* Amount of sectors to copy from the disk. */
-        _SECTORS_AMOUNT_ = (. + 511) / 512 - _APPROM_ADDR_;
         *(.rodata*)
         *(.got*)
+        /* Amount of sectors to copy from the disk. */
+        _SECTORS_AMOUNT_ = ABSOLUTE((. + 511) / 512 - _APPROM_ADDR_);
     } > approm
 
     /* Uninit data. */
